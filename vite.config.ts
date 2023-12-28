@@ -1,9 +1,10 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
-import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
+import UnoCSS from 'unocss/vite'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import { VantResolver } from '@vant/auto-import-resolver';
 import path, { resolve } from 'path'
 
 export default ({ command, mode }) => {
@@ -27,6 +28,7 @@ export default ({ command, mode }) => {
     },
     plugins: [
       vue(),
+      UnoCSS(),
       AutoImport({
         imports: ['vue', 'vue-router'],
         dts: 'src/auto-import.d.ts',
@@ -34,10 +36,9 @@ export default ({ command, mode }) => {
           enabled: true,
         },
       }),
-      /*    auto resolve third components
-            Components({
-              resolvers: [],
-            }), */
+      Components({
+        resolvers: [VantResolver()],
+      })
     ],
     build: {
       outDir: 'dist',
@@ -67,7 +68,7 @@ export default ({ command, mode }) => {
     },
     css: {
       postcss: {
-        plugins: [tailwindcss, autoprefixer]
+        plugins: [autoprefixer]
       }
     },
   });
