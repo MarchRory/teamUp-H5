@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { routes } from "@/router";
 import { RouteRecordRaw } from "vue-router";
-import { ScrollModel } from "./types";
+import { ScrollModel } from "../types/scroll";
 
 // cache each pages`s scrollTop
-export const useScrollStore = defineStore('useScrollStore', {
+const useScrollStore = defineStore('useScrollStore', {
     state: (): ScrollModel => {
         return {
             scrollMap: new Map()
@@ -32,3 +32,5 @@ export const useScrollStore = defineStore('useScrollStore', {
     /*  if you want to persist this store, use this config
         persist: true,  */
 })
+
+export default useScrollStore

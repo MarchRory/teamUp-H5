@@ -1,15 +1,67 @@
-export const token_key = import.meta.env.VITE_APP_TOKEN_KEY
+import { encrypt, decrypt } from "../crypt"
+import { tokenStorageType } from "@/stores/modules/types/user"
+import useUserStore from '@/stores/modules/userInfo/index'
+const userStore = useUserStore()
+const token_key = import.meta.env.VITE_APP_TOKEN_KEY || 'liushi_token'
+const effectiveTime = 1000 * 60 * 60 * 24 * 7  // token有效时间 一周
 
-const getToken = (): string | null | undefined => {
-    return localStorage.getItem(token_key)
-}
+const getToken = (): tokenStorageType | null | undefined => {
+    if (userStore.token) {
+        return {
+            token: userStore.token,
+            expireTime: userStore.expireTime
+        }
+    }
+    let tokenJSON: string | null | undefined = localStorage.getItem(token_key)
+    if (!tokenJSON) return
 
-const setToken = (token: string) => {
-    return localStorage.setItem(token_key, token)
+    const tokenObj = decrypt(tokenJSON, true)
+    if (tokenObj) {
+        const { token } = tokenObj as tokenStorageType
+        if (token == null || typeof token == 'undefined') return
+        return tokenObj
+    } else {
+        return
+    }
 }
 
 const removeToken = (): void => {
-    return localStorage.removeItem(token_key)
+    localStorage.removeItem(token_key)
 }
 
-export { getToken, setToken, removeToken }
+const setToken = (token: string): void => {
+    let expireTime = new Date().getTime() + effectiveTime
+    removeToken()
+    const tokenObj: tokenStorageType | string = Object.create(null, {
+        'token': {
+            value: token,
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        },
+        'expireTime': {
+            value: expireTime,
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        }
+    })
+    try {
+        let secret = encrypt(tokenObj, true)
+        localStorage.setItem(token_key, secret as string)
+        userStore.setTokenCache({ token: (tokenObj as tokenStorageType).token, expireTime: (tokenObj as tokenStorageType).expireTime })
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+const checkToken = (): Boolean => {
+    let flag = false
+    // store里没有自然就是未登录状态了
+    if (userStore.token) {
+        flag = userStore.isTokenEffective()
+    }
+    return flag
+}
+
+export { getToken, setToken, removeToken, checkToken }

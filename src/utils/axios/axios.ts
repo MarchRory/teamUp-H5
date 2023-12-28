@@ -1,7 +1,8 @@
 import axios, { AxiosResponse, AxiosRequestConfig, AxiosError, InternalAxiosRequestConfig, AxiosInstance } from 'axios';
 import { HttpCodeConfig } from './httpCode';
 import { ResponseModel, UploadFileItemModel, UploadRequestConfig } from './types/index'
-import { getToken } from '../token/index'
+import useUserStore from '@/stores/modules/userInfo';
+const userStore = useUserStore()
 
 class HttpRequest {
     service: AxiosInstance
@@ -17,8 +18,8 @@ class HttpRequest {
                 /**
                  * set your config
                  */
-                if (import.meta.env.VITE_APP_TOKEN_KEY && getToken()) {
-                    config.headers[import.meta.env.VITE_APP_TOKEN_KEY] = getToken()
+                if (import.meta.env.VITE_APP_TOKEN_KEY && userStore.token) {
+                    config.headers[import.meta.env.VITE_APP_TOKEN_KEY] = userStore.token
                 }
                 return config
             },

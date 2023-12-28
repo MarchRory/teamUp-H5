@@ -7,6 +7,7 @@ import 'vant/es/dialog/style';
 import 'vant/es/notify/style';
 import 'vant/es/image-preview/style';
 import { router } from './router/index'
+import './auth'
 import stores from './stores/index'
 import App from './App.vue'
 

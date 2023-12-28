@@ -29,6 +29,7 @@
 已经使用了`unplugin-auto-import`和`unplugin-vue-components`插件，来自动引入API和组件，所以`vue`的绝大多数API都可以直接使用，而不需要再手动按需`import`。同样的，`vant`组件库的**非函数组件**也是可以直接使用，不需要手动引入；函数组件的样式已经全局引入，不需要再手动引入，使用函数组件时只用按需引入函数即可。
 
 > 但是`自定义的vue组件、路由组件`仍然应该使用`懒加载`的方式引入！
+> `vue-router`、`pinia`相关的api改手动引入还是要手动引入
 
 ## 3、请求 API
 先在`api/types/xxx.ts`中定义好其请求参数和响应参数类型，再去`api/requestAPI/xxx.ts`下封装对应场景的请求方法
