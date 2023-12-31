@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js'
-const secret_key = CryptoJS.AES.encrypt(import.meta.env.VITE_APP_TOKEN_KEY as string, 'xdzn').toString()
+// const secret_key = CryptoJS.AES.encrypt(import.meta.env.VITE_APP_TOKEN_KEY as string, 'xdzn').toString()
+const secret_key = 'xdzn'
 
 /**
  * 加密数据

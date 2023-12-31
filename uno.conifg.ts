@@ -7,6 +7,7 @@ import {
     transformerDirectives,
     transformerVariantGroup,
 } from 'unocss'
+
 /**
  * @link https://iconify.design/docs/libraries/utils/icon-customisations.html
  */
@@ -15,13 +16,13 @@ import { IconifyIconCustomisations } from '@iconify/utils'
 export default defineConfig({
     content: {
         filesystem: [
-            '**/*.{html,js,ts,vue}',
+            '**/**/*.vue',
         ]
     },
     // 配置缩写
     shortcuts: {
         "wh-full": "w-full h-full",
-        "flex-col": "",
+        "f-col": "flex flex-col",
     },
     // 配置规则
     rules: [
@@ -43,11 +44,12 @@ export default defineConfig({
         presetAttributify(),
         // 预设图标
         presetIcons({
+            prefix: 'i-',
             collections: {
-                // 使用tabler图标集: https://icon-sets.iconify.design/tabler/
+                // 使用tabler图标集: https://icones.js.org/collection/tabler
                 // 配置集合缩写名为tb
                 // 图标使用格式: i-tb-<icon> 或者 i-tb:<icon>
-                tb: () => import('@iconify-json/tabler/icons.json').then(i => i.default)
+                tabler: () => import('@iconify-json/tabler/icons.json').then(i => i.default)
             },
             extraProperties: {
                 'display': "inline-block",
@@ -60,7 +62,7 @@ export default defineConfig({
                     props.height = '2em'
                     return props
                 },
-                // 对特定的图表自定义
+                // 对特定的图标自定义
                 iconCustomizer(collection, icon, props) {
                     // 判断collect和icon, 然后设置props, 不需要返回值
                 }

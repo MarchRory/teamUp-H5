@@ -2,7 +2,8 @@ import axios, { AxiosResponse, AxiosRequestConfig, AxiosError, InternalAxiosRequ
 import { HttpCodeConfig } from './httpCode';
 import { ResponseModel, UploadFileItemModel, UploadRequestConfig } from './types/index'
 import useUserStore from '@/stores/modules/userInfo';
-const userStore = useUserStore()
+import { showFailToast } from 'vant';
+var userStore: any
 
 class HttpRequest {
     service: AxiosInstance
@@ -18,6 +19,9 @@ class HttpRequest {
                 /**
                  * set your config
                  */
+                if (!userStore) {
+                    userStore = useUserStore()
+                }
                 if (import.meta.env.VITE_APP_TOKEN_KEY && userStore.token) {
                     config.headers[import.meta.env.VITE_APP_TOKEN_KEY] = userStore.token
                 }
@@ -45,6 +49,9 @@ class HttpRequest {
                 if (code) {
                     if (code != HttpCodeConfig.success) {
                         switch (code) {
+                            case HttpCodeConfig.error:
+                                showFailToast(data.message as string)
+                                break;
                             case HttpCodeConfig.notFound:
                                 // the method to handle this code
                                 break;

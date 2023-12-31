@@ -1,8 +1,7 @@
+import { userInfoModel } from "@/api/types/user"
 export interface tokenStorageType {
     token: string,
     expireTime: number
 }
 
-interface userBaseInfo { }
-
-export type userInfoType = tokenStorageType & userBaseInfo
+export type userInfoType = tokenStorageType & userInfoModel

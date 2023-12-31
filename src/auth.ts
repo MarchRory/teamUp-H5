@@ -5,7 +5,7 @@ import getPageTitle from "./utils/pageTitle"
 import useUserStore from '@/stores/modules/userInfo/index'
 import { showNotify } from "vant"
 import { RouteLocationNormalized } from "vue-router"
-const userStore = useUserStore()
+var userStore: any
 
 NProgress.configure({ showSpinner: false })
 
@@ -15,36 +15,28 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     NProgress.start()
     document.title = getPageTitle(to.meta.title as string | undefined)
     const isEffective = checkToken()
-    // 在白名单就直接跳转
-    if (whiteList.includes(to.path)) {
+    if (!userStore) userStore = useUserStore()
+    // 目标路由在白名单或者token有效, 就直接跳转
+    if (whiteList.includes(to.path) || isEffective) {
         next()
     }
-    // 判断token是否有效
-    if (isEffective) {
-        // token有效就直接跳转
-        next()
-    } else {
-        if (from.path == '/') {
-            next()
-        } else {
-            let msg = '登录过期, 请重新登陆'
-            showNotify({ type: 'danger', message: msg })
-            userStore.logout()
-                .then(() => { },
-                    (err) => {
-                        showNotify({
-                            type: "danger",
-                            message: "服务器异常"
-                        })
-                        console.error(err)
+    if (!isEffective && userStore.token) {
+        let msg = '登录过期, 请重新登陆'
+        showNotify({ type: 'danger', message: msg })
+        userStore.logout()
+            .then(() => { },
+                (err) => {
+                    showNotify({
+                        type: "danger",
+                        message: "服务器异常"
                     })
-                .finally(() => {
-                    userStore.$reset()
-                    removeToken()
-                    next('/?redirect=/')
+                    console.error(err)
                 })
-
-        }
+            .finally(() => {
+                userStore.$reset()
+                removeToken()
+                next(`/?redirect=${to.path}`)
+            })
     }
     NProgress.done()
 })

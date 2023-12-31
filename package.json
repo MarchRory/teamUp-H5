@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode development",
+    "dev": "vite --mode development --host",
     "build": "vite-tsc && vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.vue,.ts src --fix",
     "prepare": "husky install"
   },
   "dependencies": {
+    "@iconify-json/tabler": "^1.1.102",
     "@types/crypto-js": "^4.2.1",
     "@types/node": "^20.10.5",
     "@types/nprogress": "^0.2.3",
@@ -37,7 +38,6 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
-    "@iconify-json/tabler": "^1.1.102",
     "@unocss/preset-icons": "^0.58.2",
     "@vitejs/plugin-vue": "^4.5.0",
     "autoprefixer": "^10.4.16",

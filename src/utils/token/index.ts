@@ -1,11 +1,12 @@
 import { encrypt, decrypt } from "../crypt"
 import { tokenStorageType } from "@/stores/modules/types/user"
 import useUserStore from '@/stores/modules/userInfo/index'
-const userStore = useUserStore()
+var userStore: any
 const token_key = import.meta.env.VITE_APP_TOKEN_KEY || 'liushi_token'
 const effectiveTime = 1000 * 60 * 60 * 24 * 7  // token有效时间 一周
 
 const getToken = (): tokenStorageType | null | undefined => {
+    if (!userStore) userStore = useUserStore()
     if (userStore.token) {
         return {
             token: userStore.token,
@@ -29,7 +30,7 @@ const removeToken = (): void => {
     localStorage.removeItem(token_key)
 }
 
-const setToken = (token: string): void => {
+const setToken = (token: string): number => {
     let expireTime = new Date().getTime() + effectiveTime
     removeToken()
     const tokenObj: tokenStorageType | string = Object.create(null, {
@@ -53,11 +54,13 @@ const setToken = (token: string): void => {
     } catch (e) {
         console.error(e)
     }
+    return (tokenObj as tokenStorageType).expireTime
 }
 
 const checkToken = (): Boolean => {
     let flag = false
     // store里没有自然就是未登录状态了
+    if (!userStore) userStore = useUserStore()
     if (userStore.token) {
         flag = userStore.isTokenEffective()
     }

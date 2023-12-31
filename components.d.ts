@@ -7,8 +7,15 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Headbar: typeof import('./src/components/headbar/index.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SpeInput: typeof import('./src/components/speInput/index.vue')['default']
+    VanButton: typeof import('vant/es')['Button']
+    VanIcon: typeof import('vant/es')['Icon']
+    VanNumberKeyboard: typeof import('vant/es')['NumberKeyboard']
+    VanShareSheet: typeof import('vant/es')['ShareSheet']
+    XdInput: typeof import('./src/components/xdInput/index.vue')['default']
   }
 }
