@@ -9,33 +9,29 @@ var userStore: any
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/']
-
-router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     NProgress.start()
     document.title = getPageTitle(to.meta.title as string | undefined)
     const isEffective = checkToken()
     if (!userStore) userStore = useUserStore()
-    // 目标路由在白名单或者token有效, 就直接跳转
-    if (whiteList.includes(to.path) || isEffective) {
-        next()
-    }
-    if (!isEffective && userStore.token) {
+    if (isEffective && to.path != '/' && from.path != '/') {
+        return to.fullPath
+    } else if (!isEffective && userStore.token) {
         let msg = '登录过期, 请重新登陆'
         showNotify({ type: 'danger', message: msg })
         userStore.logout()
-            .then(() => { },
-                (err) => {
-                    showNotify({
-                        type: "danger",
-                        message: "服务器异常"
-                    })
-                    console.error(err)
-                })
-            .finally(() => {
+            .then(() => {
                 userStore.$reset()
                 removeToken()
-                next(`/?redirect=${to.path}`)
+                return `/?redirect=${to.path}`
+            })
+            .catch((err) => {
+                showNotify({
+                    type: "danger",
+                    message: "服务器异常"
+                })
+                console.error(err)
+                return `/?redirect=${to.path}`
             })
     }
     NProgress.done()

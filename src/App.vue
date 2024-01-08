@@ -2,12 +2,13 @@
 
 <template>
   <div style="width: 100vw; height: 100vh; overflow-y: auto">
-    <router-view></router-view>
-    <!--     <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }">
       <transition name="switchPage">
-        <component :is="Component" />
+        <keep-alive :include="['layout']">
+          <component :is="Component" />
+        </keep-alive>
       </transition>
-    </router-view> -->
+    </router-view>
   </div>
   <van-number-keyboard safe-area-inset-bottom />
 </template>

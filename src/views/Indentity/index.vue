@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { LoginParamsModel } from "@/api/types/user/index";
-import { loginAPI } from "@/api/requestAPI/user";
+import type { LoginParamsModel } from "@/types/user";
+import { loginAPI } from "@/api/user";
 import useUserStore from "@/stores/modules/userInfo";
-import useDeviceStore from "@/stores/modules/device/index";
 import { getToken } from "@/utils/token";
 import { useRouter } from "vue-router";
+import { deviceStoreType } from "@/main";
 const router = useRouter();
 const choice = ref(-1);
 const userStore = useUserStore();
@@ -16,7 +16,7 @@ const tokenLogin = async () => {
     let now = new Date().getTime();
     if (now < expireTime) {
       userStore.login(token).then(() => {
-        router.replace({ path: "/main" });
+        router.replace({ path: "/home" });
       });
     }
   } else {
@@ -31,8 +31,7 @@ const RegisterPage = defineAsyncComponent(
 const HeaderBar = defineAsyncComponent(
   () => import("@/components/headbar/index.vue")
 );
-const deviceStore = useDeviceStore();
-deviceStore.initDeviceWH();
+const { deviceHeight } = inject("$deviceStore") as deviceStoreType;
 const activeComp = shallowRef();
 const handleChoose = (e: Event) => {
   let { value } = e.target as HTMLLIElement & { value: number };
@@ -50,7 +49,9 @@ const handleLogin = (params: LoginParamsModel) => {
     ({ data }) => {
       const { token } = data;
       userStore.login(token).then(() => {
-        router.replace({ path: "/main" });
+        setTimeout(() => {
+          router.replace({ path: "/main" });
+        }, 400);
       });
     },
     (err) => {}
@@ -60,58 +61,60 @@ tokenLogin();
 </script>
 
 <template>
-  <div class="bg-teal-300 w-full h-full">
-    <transition name="index">
+  <div>
+    <div class="bg-teal-300 w-full h-[100vh]">
+      <transition name="index">
+        <div
+          v-show="choice === -1"
+          class="text-white text-9xl absolute left-1/2 top-40 font-900"
+          style="transform: translateX(-50%)"
+        >
+          N
+        </div>
+      </transition>
+
+      <transition name="index">
+        <ul
+          v-show="choice === -1"
+          @click.capture="handleChoose"
+          class="absolute bottom-25 m-0 w-full flex flex-col items-center"
+        >
+          <li
+            value="0"
+            class="block b-rounded-2 b-2 b-white text-teal-300 font-400 text-xl bg-white w-3/5 text-center py-3 mb-5"
+          >
+            登录
+          </li>
+          <li
+            value="1"
+            class="block text-white font-400 text-xl w-3/5 text-center py-3 b-solid b-white b-2 b-rounded-2"
+          >
+            注册
+          </li>
+        </ul>
+      </transition>
+    </div>
+
+    <transition
+      class="absolute top-0"
+      v-show="choice != -1"
+      name="switchPage"
+      mode="in-out"
+    >
       <div
-        v-show="choice === -1"
-        class="text-white text-9xl absolute left-1/2 top-40 font-900"
-        style="transform: translateX(-50%)"
+        class="w-full bg-white overscroll-x-none"
+        :style="{ height: deviceHeight + 'px' }"
       >
-        N
+        <HeaderBar :default-back="false" @on-back="choice = -1" />
+        <component
+          @onLogin="handleLogin"
+          class="flex-1 h-13/14 w-full flex flex-col justify-center items-center"
+          :is="activeComp"
+        />
+        <div></div>
       </div>
     </transition>
-
-    <transition name="index">
-      <ul
-        v-show="choice === -1"
-        @click.capture="handleChoose"
-        class="absolute bottom-25 m-0 w-full flex flex-col items-center"
-      >
-        <li
-          value="0"
-          class="block b-rounded-2 b-2 b-white text-teal-300 font-400 text-xl bg-white w-3/5 text-center py-3 mb-5"
-        >
-          登录
-        </li>
-        <li
-          value="1"
-          class="block text-white font-400 text-xl w-3/5 text-center py-3 b-solid b-white b-2 b-rounded-2"
-        >
-          注册
-        </li>
-      </ul>
-    </transition>
   </div>
-
-  <transition
-    class="absolute top-0"
-    v-show="choice != -1"
-    name="switchPage"
-    mode="in-out"
-  >
-    <div
-      class="w-full bg-white overscroll-x-none"
-      :style="{ height: deviceStore.deviceHeight + 'px' }"
-    >
-      <HeaderBar :default-back="false" @on-back="choice = -1" />
-      <component
-        @onLogin="handleLogin"
-        class="flex-1 h-13/14 w-full flex flex-col justify-center items-center"
-        :is="activeComp"
-      ></component>
-      <div></div>
-    </div>
-  </transition>
 </template>
 
 <style scoped>

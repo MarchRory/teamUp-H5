@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type {
-  RegisterFormType,
-  LoginParamsModel,
-} from "@/api/types/user/index";
+import type { RegisterFormType, LoginParamsModel } from "@/types/user";
 import { debounce } from "@/utils/fluentCtrl";
 import { showFailToast, showToast } from "vant";
-import { sendCodeAPI, registerAPI } from "@/api/requestAPI/user";
+import { sendCodeAPI, registerAPI } from "@/api/user";
 import { mailReg } from "@/utils/regExp";
 const emits = defineEmits<{
   (e: "onLogin", loginParams: LoginParamsModel): void;

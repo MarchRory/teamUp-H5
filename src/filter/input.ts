@@ -1,5 +1,5 @@
-import { debounce } from "../fluentCtrl";
-import { cn_Reg } from "../regExp";
+import { debounce } from "../utils/fluentCtrl";
+import { cn_Reg } from "../utils/regExp";
 
 
 // 过滤中文

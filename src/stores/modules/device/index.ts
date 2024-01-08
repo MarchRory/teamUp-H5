@@ -8,7 +8,7 @@ const useDeviceStore = defineStore("useDeviceStore", {
         }
     },
     actions: {
-        initDeviceWH() {
+        async initDeviceWH() {
             const { clientHeight, clientWidth } = document.documentElement
             this.deviceHeight = clientHeight
             this.deviceWidth = clientWidth

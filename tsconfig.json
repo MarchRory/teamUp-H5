@@ -37,7 +37,7 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/auth.js"
+    "src/auth.js",
   ],
   "references": [
     {

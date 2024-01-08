@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { removeToken, setToken } from "@/utils/token";
 import { userInfoType, tokenStorageType } from "../types/user";
-import { getInfoAPI, logoutAPI } from "@/api/requestAPI/user";
+import { getInfoAPI, logoutAPI } from "@/api/user";
 import { showSuccessToast } from "vant";
 
 const useUserStore = defineStore('useUserStore', {

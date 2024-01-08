@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { debounce } from "@/utils/fluentCtrl";
-import { filterCN } from "@/utils/filter/input";
+import { filterCN } from "@/filter/input";
 defineProps<{
   value: string;
   placeholder?: string;
@@ -16,9 +16,11 @@ const onchange = debounce((e: InputEvent) => {
 </script>
 
 <template>
-  <div style="width: fit-content">
+  <div class="w-fit">
     <input
-      class="px-4 py-2 b-0 border-b-2 border-gray-300 font-bold m-auto w-1/1"
+      p=" x-4 y-2"
+      border=" b-2 gray-300"
+      class="b-0 font-bold m-auto w-1/1"
       style="transform: translateX(-1rem)"
       :type="password ? 'password' : 'text'"
       :placeholder="placeholder ?? '请输入内容'"

@@ -1,7 +1,7 @@
 import request from '@/utils/axios/axios'
 import type { RegisterFormType, LoginModel, LoginParamsModel, userInfoModel } from '../types/user'
 const schema = 'user'
-enum userAPI {
+const enum userAPI {
     logout = `${schema}/front/logout`,
     code = `${schema}/mails/mailCode`,
     register = `${schema}/front/register`,

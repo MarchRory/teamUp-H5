@@ -1,4 +1,4 @@
-import { tagModel } from "../tag"
+import { tagModel } from "./tag"
 export interface RegisterFormType {
     // 指定所有索引的类型为string
     [key: string]: string,

@@ -1,4 +1,7 @@
-// eslint doc: https://eslint.org/docs/latest/use/getting-started
+/**
+ * eslint doc:
+ * @link  https://eslint.org/docs/latest/use/getting-started
+ */
 module.exports = {
     root: true,
     env: {

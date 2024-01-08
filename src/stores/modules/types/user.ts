@@ -1,4 +1,4 @@
-import { userInfoModel } from "@/api/types/user"
+import { userInfoModel } from "@/types/user"
 export interface tokenStorageType {
     token: string,
     expireTime: number

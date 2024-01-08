@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { showFailToast, showSuccessToast, showToast } from "vant";
 import { debounce } from "@/utils/fluentCtrl/index";
-import { filterCN } from "@/utils/filter/input";
-import { sendCodeAPI, retrievePwdAPI } from "@/api/requestAPI/user";
+import { filterCN } from "@/filter/input";
+import { sendCodeAPI, retrievePwdAPI } from "@/api/user";
 import { mailReg } from "@/utils/regExp";
-import { RegisterFormType } from "@/api/types/user";
+import { RegisterFormType } from "@/types/user";
 interface loginForm {
   name: string | number;
   password: string;
